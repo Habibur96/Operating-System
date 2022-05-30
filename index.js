@@ -267,3 +267,98 @@ int main()
 }
 
 
+// Write a program to simulate Bankers algorithm for the purpose of deadlock avoidance.
+
+
+#include < iostream >
+    using namespace std;
+
+int main()
+{
+    int m, n;
+    cout << "\n\n    Enter The Number Of process and Number of Resource : ";
+    cin >> m;
+    cin >> n;
+
+    int alloc[m][n], Max[m][n], Resource[n], Resource1[n], need[m][n], store[m];
+    cout << "\n";
+    cout << "    Enter the allocation for each process :\n " << endl;
+    for (int i = 1; i <= m; i++)
+    {
+        for (int j = 1; j <= n; j++)
+        {
+
+            cin >> alloc[i][j];
+        }
+    }
+    cout << "\n    Enter the Max Value of : \n";
+    for (int i = 1; i <= m; i++)
+    {
+        for (int j = 1; j <= n; j++)
+        {
+            cin >> Max[i][j];
+        }
+    }
+    cout << "\n    Enter the available resource value of :\n " << endl;
+    for (int k = 1; k <= n; k++)
+    {
+
+        cin >> Resource[k];
+    }
+    for (int i = 1; i <= n; i++)
+    {
+        Resource1[i] = Resource[i];
+    }
+    for (int i = 1; i <= m; i++)
+    {
+        for (int j = 1; j <= n; j++)
+        {
+            need[i][j] = Max[i][j] - alloc[i][j];
+        }
+    }
+    int l = 1, count1 = 1, count2 = 0, o = 0;
+    do {
+        for (int i = 1; i <= m; i++)
+        {
+            count1 = 0;
+            l = 1;
+            cout << "For Process number " << i << endl;
+            for (int j = 1; j <= n; j++) {
+                if (Resource[j] >= need[i][j]) {
+                    count1++;
+                }
+            }
+            if (count1 == n) {
+                cout << "P " << i << " is True" << endl;
+                for (int k = 1; k <= m; k++) {
+
+                    if (store[k] == i) {
+                        l++;
+                    }
+                }
+                if (l == 1) {
+                    o++;
+                    store[o] = i;
+                }
+                count2++;
+                for (int j = 1; j <= n; j++)
+                {
+                    Resource[j] += alloc[i][j];
+                }
+            }
+            else {
+                cout << "P " << i << " is False" << endl;
+            }
+        }
+    }
+    while (count2 <= m);
+    cout << "\n\nSafe Sequence: ";
+    for (int i = 1; i <= m; i++) {
+        cout << store[i];
+        if (i < m) {
+            cout << " -> ";
+        }
+    }
+    cout << "\n\n";
+}
+
